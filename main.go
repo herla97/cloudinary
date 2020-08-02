@@ -42,31 +42,25 @@ type Replace struct {
 }
 
 // generator helper
-func generator(part string) string {
+func generator(part string) Response {
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	hash := sha1.New()
+	part = part + fmt.Sprintf("&timestamp=%s%s", timestamp, os.Getenv("APISECRET"))
 	io.WriteString(hash, part)
-
-	return hex.EncodeToString(hash.Sum(nil))
+	return Response{
+		Signature: hex.EncodeToString(hash.Sum(nil)),
+		Time:      strconv.FormatInt(time.Now().Unix(), 10),
+	}
 }
 
 // SignatureGenerator type Upload
 func (u Upload) SignatureGenerator() Response {
-	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	signature := generator(fmt.Sprintf("folder=%s&tags=%s&timestamp=%s%s", u.Folder, u.Tags, timestamp, os.Getenv("APISECRET")))
-	return Response{
-		Signature: signature,
-		Time:      timestamp,
-	}
+	return generator(fmt.Sprintf("folder=%s&tags=%s", u.Folder, u.Tags))
 }
 
 // SignatureGenerator type Destroy
 func (r Replace) SignatureGenerator() Response {
-	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	signature := generator(fmt.Sprintf("public_id=%s&timestamp=%s%s", r.PublicID, timestamp, os.Getenv("APISECRET")))
-	return Response{
-		Signature: signature,
-		Time:      timestamp,
-	}
+	return generator(fmt.Sprintf("public_id=%s", r.PublicID))
 }
 
 func main() {
@@ -76,7 +70,7 @@ func main() {
 	// }
 
 	var s Signature = Replace{
-		PublicID: "loop/artist/gthcg1xcui6iczsw4zxt",
+		PublicID: "loop/artist/sihq0wba7ngacevkjhbs",
 	}
 
 	log.Println(s.SignatureGenerator())
