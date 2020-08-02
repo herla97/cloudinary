@@ -26,14 +26,12 @@ type Signature interface {
 
 // Response Model
 type Response struct {
-	Signature string
-	Time      string
+	Signature, Time string
 }
 
 // Upload Model
 type Upload struct {
-	Folder string
-	Tags   string
+	Folder, Tags string
 }
 
 // Replace Model
@@ -63,15 +61,20 @@ func (r Replace) SignatureGenerator() Response {
 	return generator(fmt.Sprintf("public_id=%s", r.PublicID))
 }
 
-func main() {
-	// var s Signature = Upload{
-	// 	Folder:    "loop/artist",
-	// 	Tags:      "artist",
-	// }
+// Print function
+func Print(s Signature) {
+	log.Println(s.SignatureGenerator())
+}
 
-	var s Signature = Replace{
+func main() {
+	u := Upload{
+		Folder: "loop/artist",
+		Tags:   "artist",
+	}
+	Print(u)
+
+	r := Replace{
 		PublicID: "loop/artist/sihq0wba7ngacevkjhbs",
 	}
-
-	log.Println(s.SignatureGenerator())
+	Print(r)
 }
