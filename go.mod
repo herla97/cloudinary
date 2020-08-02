@@ -1,8 +1,5 @@
-module github.com/herla97/signature-cloudinary
+module github.com/herla97/cloudinary
 
 go 1.14
 
-require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/joho/godotenv v1.3.0
-)
+require github.com/joho/godotenv v1.3.0
