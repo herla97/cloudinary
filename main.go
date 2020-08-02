@@ -52,7 +52,7 @@ func generator(part string) string {
 // SignatureGenerator type Upload
 func (u Upload) SignatureGenerator() Response {
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	signature := generator(fmt.Sprintf("folder=%s&tags=%s&timestamp=%s%s", u.Folder, u.Tags, timestamp, os.Getenv("APISECRET"))
+	signature := generator(fmt.Sprintf("folder=%s&tags=%s&timestamp=%s%s", u.Folder, u.Tags, timestamp, os.Getenv("APISECRET")))
 	return Response{
 		Signature: signature,
 		Time:      timestamp,
@@ -62,7 +62,7 @@ func (u Upload) SignatureGenerator() Response {
 // SignatureGenerator type Destroy
 func (r Replace) SignatureGenerator() Response {
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	signature := generator(fmt.Sprintf("public_id=%s&timestamp=%s%s", r.PublicID, timestamp, os.Getenv("APISECRET"))
+	signature := generator(fmt.Sprintf("public_id=%s&timestamp=%s%s", r.PublicID, timestamp, os.Getenv("APISECRET")))
 	return Response{
 		Signature: signature,
 		Time:      timestamp,
@@ -76,7 +76,7 @@ func main() {
 	// }
 
 	var s Signature = Replace{
-		PublicID:  "loop/artist/gthcg1xcui6iczsw4zxt",
+		PublicID: "loop/artist/gthcg1xcui6iczsw4zxt",
 	}
 
 	log.Println(s.SignatureGenerator())
