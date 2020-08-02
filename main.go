@@ -32,15 +32,13 @@ type Response struct {
 
 // Upload Model
 type Upload struct {
-	APISecret string
-	Folder    string
-	Tags      string
+	Folder string
+	Tags   string
 }
 
 // Replace Model
 type Replace struct {
-	APISecret string
-	PublicID  string
+	PublicID string
 }
 
 // generator helper
@@ -54,7 +52,7 @@ func generator(part string) string {
 // SignatureGenerator type Upload
 func (u Upload) SignatureGenerator() Response {
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	signature := generator(fmt.Sprintf("folder=%s&tags=%s&timestamp=%s%s", u.Folder, u.Tags, timestamp, u.APISecret))
+	signature := generator(fmt.Sprintf("folder=%s&tags=%s&timestamp=%s%s", u.Folder, u.Tags, timestamp, os.Getenv("APISECRET"))
 	return Response{
 		Signature: signature,
 		Time:      timestamp,
@@ -64,7 +62,7 @@ func (u Upload) SignatureGenerator() Response {
 // SignatureGenerator type Destroy
 func (r Replace) SignatureGenerator() Response {
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	signature := generator(fmt.Sprintf("public_id=%s&timestamp=%s%s", r.PublicID, timestamp, r.APISecret))
+	signature := generator(fmt.Sprintf("public_id=%s&timestamp=%s%s", r.PublicID, timestamp, os.Getenv("APISECRET"))
 	return Response{
 		Signature: signature,
 		Time:      timestamp,
@@ -73,13 +71,11 @@ func (r Replace) SignatureGenerator() Response {
 
 func main() {
 	// var s Signature = Upload{
-	// 	APISecret: os.Getenv("APISECRET"),
 	// 	Folder:    "loop/artist",
 	// 	Tags:      "artist",
 	// }
 
 	var s Signature = Replace{
-		APISecret: os.Getenv("APISECRET"),
 		PublicID:  "loop/artist/gthcg1xcui6iczsw4zxt",
 	}
 
